@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         雨课堂看课
 // @namespace    http://tampermonkey.net/
-// @version      0.3
+// @version      0.4
 // @description  雨课堂自动看课，不支持做作业
 // @author       pboymt,Sciroccogti
 // @match        https://*.yuketang.cn/pro/lms/*
@@ -27,8 +27,36 @@
         speedChild.click();
         console.log("Robot-开启2.0倍速");
     }
+
+    function openNext() {
+        var url = window.location.href;
+        var newVideoId = parseInt(/video\/([0-9]+)$/.exec(url)[1]) + 1;
+        var newUrl = url.replace(/video\/[0-9]+$/,"video/" + newVideoId);
+        window.location.replace(newUrl);
+    }
+
+    function wait() {
+        var url = window.location.href;
+        if (document.querySelector(".title-fl") == null || document.querySelector(".title-fl").firstChild.firstChild.data == "") {
+            // 标题还未加载出
+            setTimeout(wait, 500);
+        } else if (document.querySelector(".title-fl").firstChild.firstChild.data != "Video" && /video\/[0-9]+$/.test(url)) {
+            // 链接有 Video，但标题不是 Video，则是脚本走错了 url，直接跳转到下一个
+            console.log("title is" + document.querySelector(".title-fl").firstChild.firstChild.data);
+            openNext();
+            return false;
+        } else if (document.querySelector("video") == null){
+            setTimeout(wait, 500);
+            return false;
+        } else {
+            console.log("自动开始");
+            document.querySelector("video").play(); // 播放视频
+            return true;
+        }
+    }
+
     function main(url) {
-        console.log(url);
+        wait();
         if (/studycontent$/.test(url)) {
             const container = document.querySelector(".viewContainer");
             const leaves = document.querySelectorAll(".leaf-detail");
@@ -54,17 +82,15 @@
         if (/video\/[0-9]+$/.test(url)) {
             interval = setInterval(() => {
                 const video = document.querySelector("video");
-                if (video.currentTime / video.duration === 1) {
-                    console.log("视频已经结束");
-                    history.back();
+                if (document.querySelector(".icon--gou") !== null) {
+                    console.log("完成度100%");
                     // document.querySelector(".btn-next").click();
                     // clearInterval(interval);
-                    var newVideoId = parseInt(/video\/([0-9]+)$/.exec(url)[1]) + 1;
-                    var newUrl = url.replace(/video\/[0-9]+$/,"video/" + newVideoId);
-                    window.location.replace(newUrl);
+                    // 按钮点击似乎已经失效
+                    // 直接跳转下一个视频（id+1）
+                    openNext(url);
                 } else {
                     console.log("继续监测视频是否结束");
-                    video.play();
                 }
             },1000);
         }
