@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         雨课堂看课
 // @namespace    http://tampermonkey.net/
-// @version      0.4
+// @version      0.4.1
 // @description  雨课堂自动看课，不支持做作业
 // @author       pboymt,Sciroccogti
 // @match        https://*.yuketang.cn/pro/lms/*
@@ -90,6 +90,7 @@
                     // 直接跳转下一个视频（id+1）
                     openNext(url);
                 } else {
+                    video.play();
                     console.log("继续监测视频是否结束");
                 }
             },1000);
