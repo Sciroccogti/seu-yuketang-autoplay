@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      0.3
 // @description  雨课堂自动看课，不支持做作业
-// @author       pboymt
+// @author       pboymt,Sciroccogti
 // @match        https://*.yuketang.cn/pro/lms/*
 // @grant        window.onurlchange
 // ==/UserScript==
@@ -54,7 +54,6 @@
         if (/video\/[0-9]+$/.test(url)) {
             interval = setInterval(() => {
                 const video = document.querySelector("video");
-                video.play();
                 if (video.currentTime / video.duration === 1) {
                     console.log("视频已经结束");
                     history.back();
@@ -65,6 +64,7 @@
                     window.location.replace(newUrl);
                 } else {
                     console.log("继续监测视频是否结束");
+                    video.play();
                 }
             },1000);
         }
