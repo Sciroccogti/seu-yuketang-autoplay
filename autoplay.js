@@ -1,11 +1,12 @@
 // ==UserScript==
-// @name         雨课堂看课
-// @namespace    http://tampermonkey.net/
-// @version      0.4.1
-// @description  雨课堂自动看课，不支持做作业
-// @author       pboymt,Sciroccogti
-// @match        https://*.yuketang.cn/pro/lms/*
-// @grant        window.onurlchange
+// @name        雨课堂看课（改）
+// @namespace   http://tampermonkey.net/
+// @version     0.4.1
+// @description 雨课堂自动看课，不支持做作业，修改自：https://greasyfork.org/scripts/415916
+// @homepage    https://github.com/Sciroccogti/seu-yuketang-autoplay
+// @author      pboymt,Sciroccogti
+// @match       https://*.yuketang.cn/pro/lms/*
+// @grant       window.onurlchange
 // ==/UserScript==
 
 
